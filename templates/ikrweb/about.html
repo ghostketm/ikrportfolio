@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Isaac Rono{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row gx-5">
+        <!-- Left: Profile Image and Contact Info -->
+        <div class="col-lg-4 mb-4 mb-lg-0">
+            {% if about.profile_image %}
+                <img src="{{ about.profile_image.url }}" class="img-fluid rounded mb-4" alt="{{ about.name }}">
+            {% endif %}
+
+            <div class="card h-100">
+                <div class="card-body text">
+                    <h5 class="card-title">Contact Information</h5>
+                    <p><i class="fas fa-envelope"></i> {{ about.email }}</p>
+                    {% if about.phone %}
+                        <p><i class="fas fa-phone"></i> {{ about.phone }}</p>
+                    {% endif %}
+                    {% if about.location %}
+                        <p><i class="fas fa-map-marker-alt"></i> {{ about.location }}</p>
+                    {% endif %}
+
+                    <div class="social-links my-2">
+                        {% if about.linkedin %}
+                            <a href="{{ about.linkedin }}" class="btn btn-outline-primary btn-sm mb-1">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a><br>
+                        {% endif %}
+                        {% if about.github %}
+                            <a href="{{ about.github }}" class="btn btn-outline-secondary btn-sm mb-1">
+                                <i class="fab fa-github"></i> GitHub
+                            </a><br>
+                        {% endif %}
+                        {% if about.twitter %}
+                            <a href="{{ about.twitter }}" class="btn btn-outline-info btn-sm mb-1">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    {% if about.resume %}
+                        <a href="{{ about.resume.url }}" class="btn btn-success btn-sm mt-2" download>
+                            <i class="fas fa-download"></i> Download Resume
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Bio and Skills -->
+        <div class="col-lg-8">
+            <br>
+            <h1 class="text-uppercase">{{ about.name }}</h1>
+            <h3 class="text-primary">{{ about.title }}</h3>
+            <p class="lead">{{ about.bio }}</p>
+
+            <h3 class="mt-4 text-uppercase">Skills & Technologies</h3>
+            <div class="row">
+                {% regroup skills by category as skill_groups %}
+                {% for group in skill_groups %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ group.grouper }}</h5>
+                                {% for skill in group.list %}
+                                    <div class="mb-2">
+                                        <span class="badge bg-primary">{{ skill.name }}</span>
+                                        <span class="badge bg-secondary">{{ skill.get_level_display }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

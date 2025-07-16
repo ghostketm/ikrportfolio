@@ -1,0 +1,104 @@
+{% extends 'base.html' %} {% load static %} {% load custom_filters %} {# if
+you're using custom filters like 'split' #} {% block title %}Isaac Rono Digital
+Business Card{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+        <br>
+      <h1 class="section-title text-center mb-4">Digital Business Card</h1>
+
+      <!-- Business Card -->
+      <div
+        class="business-card mx-auto shadow-lg p-4 rounded"
+        style="max-width: 600px; background-color: #011b05ff"
+      >
+        <div class="business-card-content">
+          <div class="row align-items-center">
+            <div class="col-md-4 text-center mb-3 mb-md-0">
+              {% if about.profile_image %}
+              <img
+                src="{{ about.profile_image.url }}"
+                class="img-fluid rounded-circle profile-image"
+                alt="{{ about.name }}"
+                style="width: 150px; height: 150px; object-fit: cover"
+              />
+              {% else %}
+              <div
+                class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                style="width: 150px; height: 150px"
+              >
+                <span class="fs-1">{{ about.name|slice:":1" }}</span>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <h2 class="mb-1 uppercase">{{ about.name }}</h2>
+              <p>IT Guru | Software Engineer</p>
+              <ul class="list-unstyled">
+                {% if about.email %}
+                <li>
+                  <i class="fas fa-envelope text-color-white"></i>
+                  <a href="mailto:{{ about.email }}" class="text-white"
+                    >{{ about.email }}</a
+                  >
+                </li>
+                {% endif %} {% if about.phone %}
+                <li>
+                  <i class="fas fa-phone text-white"></i>
+                  <a href="tel:{{ about.phone }}" class="text-white"
+                    >{{ about.phone }}</a
+                  >
+                </li>
+                {% endif %} {% if about.website %}
+                <li>
+                  <i class="fas fa-globe text-white"></i>
+                  <a
+                    href="{{ about.website }}"
+                    target="_blank"
+                    class="text-white"
+                    >{{ about.website }}</a
+                  >
+                </li>
+                {% endif %} {% if about.location %}
+                <li>
+                  <i class="fas fa-map-marker-alt"></i> {{ about.location }}
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- Technologies/Skills -->
+        {% if about.skills %}
+        <h5 class="mb-2">Skills</h5>
+        <div class="d-flex flex-wrap gap-2">
+          {% for skill in about.skills|split:"," %}
+          <span class="badge bg-secondary">{{ skill }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Social Links -->
+        {% if about.social_links %}
+        <hr class="my-4" />
+        <h5 class="mb-2">Connect With Me</h5>
+        <div class="d-flex gap-3">
+          {% for platform, link in about.social_links.items %}
+          <a
+            href="{{ link }}"
+            target="_blank"
+            class="btn btn-outline-dark btn-sm"
+          >
+            <i class="fab fa-{{ platform|lower }}"></i> {{ platform|title }}
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

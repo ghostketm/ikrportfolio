@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IKR Knowledge{% endblock %}
+
+{% block content %}
+<br>
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Education</h1>
+    
+    {% if education_list %}
+        <div class="row">
+            {% for education in education_list %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ education.degree }}</h5>
+                            <h6 class="card-subtitle mb-2 text-secondary-custom">{{ education.institution }}</h6>                            
+                            <p class="card-text">{{ education.description }}</p>
+                            
+                            <div class="row text-success">
+                                <div class="col-6">
+                                    <strong>Field of Study:</strong> {{ education.field_of_study }}
+                                </div>
+                                <div class="col-6">
+                                    <strong>Start Date:</strong> {{ education.start_date|date:"M d, Y" }}
+                                </div>
+                                {% if education.end_date %}
+                                    <div class="col-6">
+                                        <strong>End Date:</strong> {{ education.end_date|date:"M d, Y" }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        No education information available.
+    {% endif %}
+</div>
+{% endblock %}

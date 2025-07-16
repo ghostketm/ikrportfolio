@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Isaac Rono{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <h2 class="display-4 fw-bold typing-animation text-uppercase">{{ about.name|default:"Isaac Rono" }}</h2>
+                <p class="lead text-secondary-custom fs-3 mb-4">{{ about.title|default:"IT Guru & Software Developer" }}</p>
+                <p class="fs-5 mb-4">{{ about.bio|default:"Passionate about creating innovative solutions and pushing the boundaries of technology."|truncatewords:30 }}</p>
+                <div class="hero-buttons">
+                    <a href="{% url 'about' %}" class="btn btn-custom btn-lg me-3 hover-lift">
+                        <i class="fas fa-user"></i> Learn More
+                    </a>
+                    <a href="{% url 'project_list' %}" class="btn btn-outline-custom btn-lg hover-lift">
+                        <i class="fas fa-laptop-code"></i> View Projects
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-container">
+                    {% if about.profile_image %}
+                        <img src="{{ about.profile_image.url }}" class="img-fluid profile-image" alt="{{ about.name }}" style="max-width: 400px;">
+                    {% else %}
+                        <div class="placeholder-image bg-gradient-primary d-flex align-items-center justify-content-center" style="width: 400px; height: 400px; border-radius: 50%; margin: 0 auto;">
+                            <i class="fas fa-user fa-10x text-dark"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="row">
+            {% for project in featured_projects %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 animated-card glow-on-hover">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" class="card-img-top project-image" alt="{{ project.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-gradient-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-code fa-3x text-white"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title text-primary-custom">
+                                <i class="fas fa-project-diagram"></i> {{ project.title }}
+                            </h5>
+                            <p class="card-text">{{ project.description|truncatewords:20 }}</p>
+                            <div class="mb-3">
+                                {% for tech in project.technologies|split:"," %}
+                                    <span class="badge bg-secondary">{{ tech }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'project_detail' project.pk %}" class="btn btn-custom btn-sm hover-lift">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-outline-custom btn-sm ms-2 hover-lift" target="_blank">
+                                    <i class="fab fa-github"></i> Code
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="card bg-gradient-secondary p-5">
+                        <h3 class="text-white mb-3">
+                            <i class="fas fa-code-branch"></i> Projects Coming Soon
+                        </h3>
+                        <p class="text-white lead">Exciting projects are being developed. Check back soon!</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {% if featured_projects %}
+            <div class="text-center mt-4">
+                <a href="{% url 'project_list' %}" class="btn btn-outline-custom btn-lg hover-lift">
+                    <i class="fas fa-plus"></i> View All Projects
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="row">
+            {% for skill in skills %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="skills-card text-center hover-lift">
+                        <div class="skill-icon mb-3">
+                            <i class="fas fa-{{ skill.icon|default:'code' }} fa-2x text-primary-custom"></i>
+                        </div>
+                        <h6 class="card-title text-secondary-custom">{{ skill.name }}</h6>
+                        <div class="skill-level">
+                            <span class="badge badge-secondary">{{ skill.get_level_display }}</span>
+                        </div>
+                        <div class="skill-progress mt-2">
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-gradient-primary" style="width: {% if skill.level == 'beginner' %}25%{% elif skill.level == 'intermediate' %}50%{% elif skill.level == 'advanced' %}75%{% else %}100%{% endif %}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="card bg-gradient-primary p-4">
+                        <h4 class="text-dark mb-3">
+                            <i class="fas fa-tools"></i> Skills Portfolio
+                        </h4>
+                        <p class="text-dark">Skills showcase will be available soon!</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- About Preview Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="section-title text-start">About Me</h2>
+                <p class="lead text-primary-custom">IT Guru & Technology Enthusiast</p>
+                <p class="fs-5">{{ about.bio|default:"I'm a passionate software developer with expertise in modern web technologies, specializing in creating innovative solutions that make a difference. With a strong foundation in full-stack development and a keen eye for user experience, I transform ideas into reality."|truncatewords:50 }}</p>
+                <div class="mt-4">
+                    <a href="{% url 'about' %}" class="btn btn-custom hover-lift">
+                        <i class="fas fa-user-circle"></i> Learn More About Me
+                    </a>
+                    {% if about.resume %}
+                        <a href="{{ about.resume.url }}" class="btn btn-outline-custom ms-3 hover-lift" download>
+                            <i class="fas fa-download"></i> Download Resume
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-stats">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="stat-card text-center p-3 bg-gradient-primary rounded">
+                                <h3 class="text-dark mb-0">{{ projects.count|default:"10" }}+</h3>
+                                <p class="text-dark mb-0">Projects</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="stat-card text-center p-3 bg-gradient-secondary rounded">
+                                <h3 class="text-white mb-0">{{ skills.count|default:"20" }}+</h3>
+                                <p class="text-white mb-0">Skills</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card text-center p-3 border-glow rounded">
+                                <h3 class="text-primary-custom mb-0">5+</h3>
+                                <p class="text-white mb-0">Years Experience</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card text-center p-3 border-glow rounded">
+                                <h3 class="text-accent mb-0">24/7</h3>
+                                <p class="text-white mb-0">Support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="py-5 bg-gradient-primary">
+    <div class="container text-center">
+        <h2 class="text-dark mb-4">Ready to Work Together?</h2>
+        <p class="lead text-dark mb-4">Let's create something amazing together. Get in touch and let's discuss your next project.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'contact' %}" class="btn btn-dark btn-lg me-3 hover-lift">
+                <i class="fas fa-envelope"></i> Get In Touch
+            </a>
+            <a href="{% url 'bussiness_card' %}" class="btn btn-outline-dark btn-lg hover-lift">
+                <i class="fas fa-id-card"></i> Business Card
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
