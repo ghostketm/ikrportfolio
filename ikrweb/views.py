@@ -30,18 +30,14 @@ def about(request):
     return render(request, 'ikrweb/about.html', context)
 
 def project_list(request):
-    """Projects listing page"""
     projects = Project.objects.all()
-    
     context = {
         'projects': projects,
     }
     return render(request, 'ikrweb/project_list.html', context)
 
 def project_detail(request, pk):
-    """Individual project detail page"""
     project = get_object_or_404(Project, pk=pk)
-    
     context = {
         'project': project,
     }
@@ -64,6 +60,16 @@ def bussiness_card(request):
         'about': about,
     }    
     return render(request, 'ikrweb/bc.html', context)
+
+#creating tipping using my safaricom mpesa number
+def tipping(request):
+    """Tipping page view"""
+    about = About.objects.first()
+    
+    context = {
+        'about': about,
+    }
+    return render(request, 'ikrweb/tipping.html', context)
 
 def contact(request):
     """Contact page with form"""

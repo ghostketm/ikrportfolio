@@ -11,7 +11,7 @@
     --text-muted: #888888;
     --glow-color: #00ff41;
     --border-color: #333333;
-    --gradient-primary: linear-gradient(135deg, #00ff41 0%, #0084ff 100%);
+    --gradient-primary: linear-gradient(135deg, #09521b 0%, #0c467c 100%);
     --gradient-secondary: linear-gradient(135deg, #0084ff 0%, #ff6b6b 100%);
 }
 
@@ -20,13 +20,23 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 body {
     font-family: 'Courier New', monospace;
     background: var(--dark-bg);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
 }
 p{
     color: whitesmoke;
@@ -48,10 +58,12 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 132, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 60%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+    background:
+  radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.15) 0%, transparent 50%),
+  radial-gradient(circle at 80% 80%, rgba(0, 132, 255, 0.15) 0%, transparent 50%),
+  radial-gradient(circle at 40% 60%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
+  #050a02;  /* very dark green/black base */
+background-blend-mode: multiply;
     z-index: -1;
     animation: matrixMove 20s infinite linear;
 }
@@ -59,6 +71,10 @@ body::before {
 @keyframes matrixMove {
     0% { transform: translateY(0px); }
     100% { transform: translateY(-100px); }
+}
+/* Wrapper for all main content before footer */
+.content-wrapper {
+    flex: 1 0 auto;
 }
 
 /* Navigation Styles */
@@ -271,6 +287,16 @@ body::before {
     color: var(--text-primary);
     line-height: 1.6;
 }
+.card-img-top {
+  pointer-events: none; /* so clicks go through */
+  user-select: none;
+  z-index: 1;
+}
+
+.card-footer {
+  position: relative;
+  z-index: 2; /* Optional: ensure button background is clear */
+}
 
 /* Animated Cards */
 .animated-card {
@@ -369,6 +395,7 @@ footer {
     border-top: 1px solid var(--border-color);
     position: relative;
     margin-top: auto;
+    flex-shrink: 0;
 }
 
 footer::before {
@@ -662,3 +689,20 @@ footer a:hover {
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
+/* Custom styles for the QR Code Container */
+.qr-code-container {
+    position: relative;
+    width: 9999px;
+    height: 340px;/* Occupy full width of its parent column */ /* This creates the square aspect ratio (100% of width) */
+    overflow: hidden; /* Hide any overflow if content slightly exceeds */
+    max-width: 280px; /* Adjust this value to make the square wider */
+    /* You might need to adjust max-width based on how wide you want it to appear
+       while still fitting well on different screen sizes. */
+    border: 1px solid #ddd; /* Optional: A subtle border for the square div */
+    background-color: #fff; /* Optional: A background color for the square div */
+    box-sizing: border-box; /* Ensures padding doesn't add to the width */
+}
+
+
+
+/* Ensure existing qr-code-img styles are compatible */

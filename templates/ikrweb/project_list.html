@@ -4,22 +4,24 @@
 {% block title %}My Projects{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <br>
+<div class="container pt-5 mt-5 position-relative">
     <h1 class="text-center mb-5">My Projects</h1>
-    
+
     <div class="row">
         {% for project in projects %}
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 shadow">
                     {% if project.image %}
                         <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
                     {% endif %}
+
                     <div class="card-body">
-                        <h5 class="card-title">
-                            {{ project.title }}
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            <a href="{% url 'project_detail' project.pk %}" style="color: #00ff41; text-decoration: none; font-weight: 600;">
+                                {{ project.title }}
+                            </a>
                             {% if project.featured %}
-                                <span class="badge bg-warning">Featured</span>
+                                <span class="badge bg-warning text-dark">Featured</span>
                             {% endif %}
                         </h5>
                         <p class="card-text">{{ project.description|truncatewords:25 }}</p>
@@ -32,15 +34,18 @@
                             <small class="text-primary">{{ project.technologies }}</small>
                         </p>
                     </div>
-                    <div class="card-footer">
-                        <a href="{% url 'project_detail' project.pk %}" class="btn btn-primary text-white">View Details</a>
+
+                    <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
+                        <a href="{% url 'project_detail' project.pk %}" class="btn btn-primary text-white mb-1">
+                            View Details
+                        </a>
                         {% if project.github_url %}
-                            <a href="{{ project.github_url }}" class="btn btn-outline-dark btn-sm" target="_blank">
+                            <a href="{{ project.github_url }}" class="btn btn-outline-secondary btn-sm mb-1" target="_blank">
                                 <i class="fab fa-github"></i> Code
                             </a>
                         {% endif %}
                         {% if project.live_url %}
-                            <a href="{{ project.live_url }}" class="btn btn-outline-success btn-sm" target="_blank">
+                            <a href="{{ project.live_url }}" class="btn btn-outline-success btn-sm mb-1" target="_blank">
                                 <i class="fas fa-external-link-alt"></i> Live
                             </a>
                         {% endif %}

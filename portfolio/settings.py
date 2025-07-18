@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-k8+s^yl5)26og44hp$rdh6&9_k1*@kpku=51=gwvceyd_*rrre
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = []#'.onrender.com']
 
 
 # Application definition
@@ -138,3 +138,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'alvinkiptoo26@gmail.com'
+EMAIL_HOST_PASSWORD = 'edjp ipgy ifaw dsyq'  # Not your Gmail login password!
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

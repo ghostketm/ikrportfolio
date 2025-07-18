@@ -2,27 +2,25 @@
 {% load static %}
 
 {% block title %}IKR Knowledge{% endblock %}
-
 {% block content %}
-<br>
-<div class="container py-5">
+<div class="container pt-5 mt-4">
     <h1 class="mb-4 text-center">Education</h1>
     
     {% if education_list %}
         <div class="row">
             {% for education in education_list %}
                 <div class="col-md-6 mb-4">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ education.degree }}</h5>
                             <h6 class="card-subtitle mb-2 text-secondary-custom">{{ education.institution }}</h6>                            
                             <p class="card-text">{{ education.description }}</p>
                             
                             <div class="row text-success">
-                                <div class="col-6">
+                                <div class="col-6 mb-2">
                                     <strong>Field of Study:</strong> {{ education.field_of_study }}
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 mb-2">
                                     <strong>Start Date:</strong> {{ education.start_date|date:"M d, Y" }}
                                 </div>
                                 {% if education.end_date %}
@@ -37,7 +35,9 @@
             {% endfor %}
         </div>
     {% else %}
-        No education information available.
+        <div class="alert alert-info text-center">
+            No education information available.
+        </div>
     {% endif %}
 </div>
 {% endblock %}
