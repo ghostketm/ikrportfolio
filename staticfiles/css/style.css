@@ -689,3 +689,20 @@ footer a:hover {
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
+/* Custom styles for the QR Code Container */
+.qr-code-container {
+    position: relative;
+    width: 9999px;
+    height: 340px;/* Occupy full width of its parent column */ /* This creates the square aspect ratio (100% of width) */
+    overflow: hidden; /* Hide any overflow if content slightly exceeds */
+    max-width: 280px; /* Adjust this value to make the square wider */
+    /* You might need to adjust max-width based on how wide you want it to appear
+       while still fitting well on different screen sizes. */
+    border: 1px solid #ddd; /* Optional: A subtle border for the square div */
+    background-color: #fff; /* Optional: A background color for the square div */
+    box-sizing: border-box; /* Ensures padding doesn't add to the width */
+}
+
+
+
+/* Ensure existing qr-code-img styles are compatible */
