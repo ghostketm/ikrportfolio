@@ -1,72 +1,151 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Consult{% endblock %}
+{% block title %}Consultation & Inquiries | Isaac Rono{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <br>
-      <h1 class="text-center mb-5">For Consultation</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
-      <div class="row g-4">
-        <!-- ✅ Contact Card with Compact Spacing -->
-        <div class="col-md-6">
-          <div class="card shadow-sm p-3">
-            <div class="card-body p-0">
-              <h5 class="card-title mb-2">Contact Information</h5>
-              <p class="mb-2 small">
-                I'm always open to discussing new opportunities, 
-                interesting projects or just having a chat.
-              </p>
-              <p class="mb-1"><i class="fas fa-envelope"></i> isaackipkogeirono@gmail.com</p>
-              <p class="mb-1"><i class="fas fa-phone"></i> +254 788 099 560</p>
-              <p class="mb-3"><i class="fas fa-map-marker-alt"></i> Baringo, Kenya</p>
-
-              <!-- Social & Tip Buttons (closer to location now) -->
-              <div class="d-flex flex-column align-items-center gap-1">
-                <div class="d-flex flex-wrap justify-content-center gap-2">
-                  <a href="https://www.linkedin.com/in/isaacrono" class="btn btn-outline-primary btn-sm" target="_blank">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                  </a>
-                  <a href="https://github.com/ghostketm" class="btn btn-outline-secondary btn-sm" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
-                  </a>
-                </div>
-                <a href="{% url 'tipping' %}" class="btn btn-success btn-lg mt-2 px-4 shadow-sm">
-                  <i class="fas fa-money-bill-wave me-2"></i> TIP ME
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contact Form -->
-        <div class="col-md-6">
-          <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
-              {{ form.name }}
-            </div>
-            <div class="mb-3">
-              <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
-              {{ form.email }}
-            </div>
-            <div class="mb-3">
-              <label for="{{ form.subject.id_for_label }}" class="form-label">Subject</label>
-              {{ form.subject }}
-            </div>
-            <div class="mb-3">
-              <label for="{{ form.message.id_for_label }}" class="form-label">Message</label>
-              {{ form.message }}
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Send Message</button>
-          </form>
-        </div>
-      </div>
+    <!-- Header Section -->
+    <div class="space-y-4 text-center max-w-2xl mx-auto">
+        <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Direct Inquiries & Engagements</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Technical Consultation</h1>
+        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+            Reach out regarding ERP implementations, custom backend software architecture, or advisory engagements.
+        </p>
     </div>
-  </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Left Column: Direct Contact Details & Tipping -->
+        <div class="lg:col-span-5 space-y-6">
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Direct Coordinates</h2>
+                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">
+                        I typically respond to serious inquiries within one business day.
+                    </p>
+                </div>
+
+                <div class="space-y-4 text-sm text-gray-300">
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-brand-400 shrink-0 mt-0.5">
+                            <i class="fas fa-envelope text-xs"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Email</span>
+                            <a href="mailto:{{ about.email|default:'isaackipkogeirono@gmail.com' }}" class="text-white hover:text-brand-400 font-medium break-all transition-colors">
+                                {{ about.email|default:"isaackipkogeirono@gmail.com" }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-brand-400 shrink-0 mt-0.5">
+                            <i class="fas fa-phone text-xs"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Phone / WhatsApp</span>
+                            <a href="tel:{{ about.phone|default:'+254705027739' }}" class="text-white hover:text-brand-400 font-medium transition-colors">
+                                {{ about.phone|default:"+254 705 027 739" }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-brand-400 shrink-0 mt-0.5">
+                            <i class="fas fa-map-marker-alt text-xs"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Location</span>
+                            <span class="text-white font-medium">{{ about.location|default:"Baringo, Kenya" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tipping / Buy Me a Coffee Callout -->
+                <div class="p-4 rounded-2xl bg-dark-900 border border-amber-500/20 space-y-2">
+                    <div class="flex items-center gap-2 text-amber-400 text-xs font-mono font-semibold uppercase">
+                        <i class="fas fa-mug-hot text-xs"></i>
+                        <span>Buy Me a Coffee</span>
+                    </div>
+                    <p class="text-xs text-gray-400">
+                        Appreciate open-source packages or technical advisory? Fuel further development with a coffee.
+                    </p>
+                    <div class="pt-1">
+                        <a href="{% url 'tipping' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 hover:text-amber-300">
+                            <span>Send Coffee via M-Pesa</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Contact Form -->
+        <div class="lg:col-span-7">
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Send a Direct Message</h2>
+                    <p class="text-xs text-gray-400 mt-1">
+                        Fill in your project requirements and I will get back to you promptly.
+                    </p>
+                </div>
+
+                <form method="post" action="{% url 'contact' %}" class="space-y-4">
+                    {% csrf_token %}
+
+                    <div>
+                        <label for="{{ form.name.id_for_label }}" class="block text-xs font-mono uppercase text-gray-400 mb-1.5">
+                            Full Name *
+                        </label>
+                        <input type="text" name="name" id="{{ form.name.id_for_label }}" required placeholder="e.g. Jane Doe" value="{{ form.name.value|default:'' }}" class="w-full px-4 py-2.5 rounded-xl bg-dark-900 border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 transition-colors">
+                        {% if form.name.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-xs font-mono uppercase text-gray-400 mb-1.5">
+                            Email Address *
+                        </label>
+                        <input type="email" name="email" id="{{ form.email.id_for_label }}" required placeholder="name@company.com" value="{{ form.email.value|default:'' }}" class="w-full px-4 py-2.5 rounded-xl bg-dark-900 border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 transition-colors">
+                        {% if form.email.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.subject.id_for_label }}" class="block text-xs font-mono uppercase text-gray-400 mb-1.5">
+                            Subject *
+                        </label>
+                        <input type="text" name="subject" id="{{ form.subject.id_for_label }}" required placeholder="e.g. ERP Integration / Project Consultation" value="{{ form.subject.value|default:'' }}" class="w-full px-4 py-2.5 rounded-xl bg-dark-900 border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 transition-colors">
+                        {% if form.subject.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.subject.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.message.id_for_label }}" class="block text-xs font-mono uppercase text-gray-400 mb-1.5">
+                            Message Details *
+                        </label>
+                        <textarea name="message" id="{{ form.message.id_for_label }}" rows="5" required placeholder="Describe your system requirements, timeline, or consultation topics..." class="w-full px-4 py-2.5 rounded-xl bg-dark-900 border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 transition-colors">{{ form.message.value|default:'' }}</textarea>
+                        {% if form.message.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.message.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium text-sm shadow-lg shadow-brand-500/25 transition-all hover-lift flex items-center justify-center gap-2">
+                            <i class="fas fa-paper-plane text-xs"></i>
+                            <span>Send Message</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 {% endblock %}

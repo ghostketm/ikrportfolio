@@ -1,27 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
 {% load static %}
 {% load custom_filters %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Isaac Rono{% endblock %}</title>
-    <meta name="description" content="Isaac Rono - Professional IT Guru, Software Developer, and Technology Enthusiast">
-    <meta name="keywords" content="Isaac Rono, IT Guru, Software Developer, Web Developer, Django, Python, JavaScript">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <title>{% block title %}{{ about.name|default:"Isaac Rono" }} | Enterprise Systems & Software Engineering{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ about.summary|default:'Isaac Rono (IKR) - Senior Enterprise Systems Architect, ERP Specialist (Sage Intacct), and Full-Stack Software Engineer based in Kenya.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Isaac Rono, IKR, Software Engineer, ERP Consultant, Sage Intacct, Python, Django, Full-Stack, Cloud Architecture, Kenya{% endblock %}">
+    <meta name="author" content="{{ about.name|default:'Isaac Rono' }}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{{ about.name|default:'Isaac Rono' }} | Enterprise Systems & Software Engineering{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ about.summary|default:'Enterprise Systems Architect, ERP Specialist, and Full-Stack Software Engineer based in Kenya.' }}{% endblock %}">
+    {% if about.image %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ about.image.url }}">
+    {% else %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/favi.jpg' %}">
+    {% endif %}
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ about.name|default:'Isaac Rono' }} | Enterprise Systems & Software Engineering{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ about.summary|default:'Enterprise Systems Architect, ERP Specialist, and Full-Stack Software Engineer based in Kenya.' }}{% endblock %}">
+    {% if about.image %}
+        <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ about.image.url }}">
+    {% else %}
+        <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/favi.jpg' %}">
+    {% endif %}
+
+    <!-- Structured Data (JSON-LD) for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "{{ about.name|default:'Isaac Rono' }}",
+      "jobTitle": "{{ about.title|default:'Enterprise Systems Architect & Software Engineer' }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}",
+      "sameAs": [
+        {% if about.github %}"{{ about.github }}",{% endif %}
+        {% if about.linkedin %}"{{ about.linkedin }}",{% endif %}
+        {% if about.twitter %}"{{ about.twitter }}"{% endif %}
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ about.location|default:'Kenya' }}"
+      }
+    }
+    </script>
+
+    <!-- Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for standard UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Tailwind CSS (Play CDN with custom config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#ecfdf5',
+                100: '#d1fae5',
+                400: '#34d399',
+                500: '#10b981',
+                600: '#059669',
+                700: '#047857',
+              },
+              dark: {
+                950: '#06090e',
+                900: '#090d16',
+                800: '#111827',
+                700: '#1f2937',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS tokens & fallback styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
+
     <!-- Favicon -->
     {% if about.favicon %}
         <link rel="icon" type="image/x-icon" href="{{ about.favicon.url }}">
@@ -29,127 +103,203 @@
         <link rel="icon" type="image/x-icon" href="{% static 'img/favi.jpg' %}">
     {% endif %}
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-                <i class="text-uppercase"></i> Isaac Rono
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">
-                            <i class="fas fa-home"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">
-                            <i class="fas fa-user"></i> About
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'project_list' %}">
-                            <i class="fas fa-laptop-code"></i> Projects
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'education' %}">
-                            <i class="fas fa-graduation-cap"></i> Education
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contact' %}">
-                            <i class="fas fa-envelope"></i> Consult
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'bussiness_card' %}">
-                            <i class="fas fa-id-card"></i> Business Card
-                        </a>
-                    </li>
-                </ul>
+<body class="bg-dark-900 text-gray-100 flex flex-col min-h-screen selection:bg-brand-500 selection:text-white relative">
+
+    <!-- Ambient background glows -->
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation Bar -->
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="nav-container flex items-center justify-between h-20 transition-all duration-300">
+                <!-- Brand / Logo -->
+                <a href="{% url 'home' %}" class="flex items-center gap-3 group focus:outline-none">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center font-mono font-bold text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform duration-200 shrink-0">
+                        IKR
+                    </div>
+                    <div class="brand-text flex flex-col transition-all duration-300 origin-left">
+                        <span class="font-bold text-lg tracking-tight text-white group-hover:text-brand-400 transition-colors whitespace-nowrap">
+                            Isaac Rono
+                        </span>
+                        <span class="text-xs font-mono text-gray-400 whitespace-nowrap">
+                            Systems & Engineering
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1 bg-dark-800/60 p-1.5 rounded-full border border-white/5 backdrop-blur-md">
+                    <a href="{% url 'home' %}" class="px-4 py-2 text-sm font-medium rounded-full text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        Home
+                    </a>
+                    <a href="{% url 'about' %}" class="px-4 py-2 text-sm font-medium rounded-full text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        About
+                    </a>
+                    <a href="{% url 'project_list' %}" class="px-4 py-2 text-sm font-medium rounded-full text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        Projects
+                    </a>
+                    <a href="{% url 'education' %}" class="px-4 py-2 text-sm font-medium rounded-full text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        Credentials
+                    </a>
+                    <a href="{% url 'bussiness_card' %}" class="px-4 py-2 text-sm font-medium rounded-full text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        vCard
+                    </a>
+                </nav>
+
+                <!-- Primary Action & Mobile Hamburger -->
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'contact' %}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl bg-brand-500 hover:bg-brand-600 text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5">
+                        <i class="fas fa-paper-plane text-xs"></i>
+                        <span>Consult</span>
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" type="button" aria-label="Toggle Navigation" aria-expanded="false" class="md:hidden p-2.5 rounded-xl bg-dark-800 text-gray-300 hover:text-white border border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
             </div>
         </div>
-    </nav>
 
-    <!-- Main Content -->
-    <div class="content-wrapper">
-    <main class="main-content">
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-white/10 bg-dark-900/95 backdrop-blur-xl px-4 pt-2 pb-6 space-y-2">
+            <a href="{% url 'home' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fas fa-home w-6 text-brand-400"></i> Home
+            </a>
+            <a href="{% url 'about' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fas fa-user w-6 text-brand-400"></i> About
+            </a>
+            <a href="{% url 'project_list' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fas fa-laptop-code w-6 text-brand-400"></i> Projects
+            </a>
+            <a href="{% url 'education' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fas fa-graduation-cap w-6 text-brand-400"></i> Credentials & Experience
+            </a>
+            <a href="{% url 'bussiness_card' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fas fa-id-card w-6 text-brand-400"></i> Digital Business Card
+            </a>
+            <a href="{% url 'tipping' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-amber-300 hover:text-white hover:bg-amber-500/10 transition-colors">
+                <i class="fas fa-mug-hot w-6 text-amber-400"></i> Buy Me a Coffee
+            </a>
+            <a href="{% url 'contact' %}" class="block px-4 py-2.5 rounded-lg text-base font-medium text-brand-400 bg-brand-500/10 border border-brand-500/20">
+                <i class="fas fa-paper-plane w-6 text-brand-400"></i> Schedule Consultation
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Container with safe header offset -->
+    <main class="flex-grow pt-24 pb-16 relative z-10">
         {% if messages %}
-            <div class="container mt-3">
+            <div class="max-w-4xl mx-auto px-4 mb-6">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show glow-on-hover" role="alert">
-                        <i class="fas fa-check-circle"></i> {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="p-4 rounded-xl flex items-center gap-3 border shadow-lg {% if message.tags == 'success' %}bg-emerald-950/70 border-emerald-500/40 text-emerald-200{% elif message.tags == 'error' %}bg-red-950/70 border-red-500/40 text-red-200{% else %}bg-cyan-950/70 border-cyan-500/40 text-cyan-200{% endif %}">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle text-emerald-400{% else %}fa-info-circle text-cyan-400{% endif %} text-lg"></i>
+                        <span class="text-sm font-medium">{{ message }}</span>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
-        
+
         {% block content %}
         {% endblock %}
     </main>
-    </div>
 
-    <!-- Footer -->
-     <br>
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="mb-2">Isaac Rono All rights reserved</p>
-                    <p class="mb-0">
-                        <i class="fas fa-code text-primary-custom"></i> IKR developer and engineer
-                    </p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/isaac-rono" class="text-white me-3 glow-on-hover" target="_blank">
-                            <i class="fab fa-linkedin fa-lg"></i>
-                        </a>
-                        <a href="https://github.com/ghostketm" class="text-white me-3 glow-on-hover" target="_blank">
-                            <i class="fab fa-github fa-lg"></i>
-                        </a>
-                        <a href="https://x.com/@ghotketm" class="text-white me-3 glow-on-hover" target="_blank">
-                            <i class="fab fa-twitter fa-lg"></i>
-                        </a>
-                        <a href="https://www.instagram.com/isaac_rono" class="text-white me-3 glow-on-hover" target="_blank">
-                            <i class="fab fa-instagram fa-lg"></i>
-                        </a>
-                        <a href="https://www.youtube.com/@isaac-rono" class="text-white me-3 glow-on-hover" target="_blank">
-                            <i class="fab fa-youtube fa-lg"></i>
-                        </a>
-                        <a href="mailto:isaac.rono@email.com" class="text-white glow-on-hover">
-                            <i class="fas fa-envelope fa-lg"></i>
-                        </a>
+    <!-- Professional Footer -->
+    <footer class="relative z-10 border-t border-white/10 bg-dark-950/80 backdrop-blur-md pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                <!-- Col 1: Brand & Identity -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center font-mono font-bold text-white text-sm">
+                            IKR
+                        </div>
+                        <span class="text-lg font-bold text-white">Isaac Rono</span>
                     </div>
+                    <p class="text-gray-400 text-sm max-w-sm leading-relaxed">
+                        {{ about.title|default:"Enterprise Systems Architect & Software Engineer" }}. Specializing in robust ERP implementations, enterprise cloud backends, and full-stack solutions.
+                    </p>
+                    <div class="flex items-center gap-3 text-gray-400">
+                        {% if about.github %}
+                            <a href="{{ about.github }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        {% endif %}
+                        {% if about.linkedin %}
+                            <a href="{{ about.linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        {% endif %}
+                        {% if about.twitter %}
+                            <a href="{{ about.twitter }}" target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        {% endif %}
+                        {% if about.youtube %}
+                            <a href="{{ about.youtube }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if about.email %}
+                            <a href="mailto:{{ about.email }}" aria-label="Email" class="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation -->
+                <div>
+                    <h3 class="text-xs font-mono uppercase text-gray-400 tracking-wider mb-4">Navigation</h3>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="{% url 'home' %}" class="text-gray-400 hover:text-brand-400 transition-colors">Home Overview</a></li>
+                        <li><a href="{% url 'about' %}" class="text-gray-400 hover:text-brand-400 transition-colors">Professional Profile</a></li>
+                        <li><a href="{% url 'project_list' %}" class="text-gray-400 hover:text-brand-400 transition-colors">Featured Projects</a></li>
+                        <li><a href="{% url 'education' %}" class="text-gray-400 hover:text-brand-400 transition-colors">Education & Experience</a></li>
+                        <li><a href="{% url 'bussiness_card' %}" class="text-gray-400 hover:text-brand-400 transition-colors">Digital Business Card</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Direct Connect & Support -->
+                <div>
+                    <h3 class="text-xs font-mono uppercase text-gray-400 tracking-wider mb-4">Direct Contact</h3>
+                    <ul class="space-y-2.5 text-sm text-gray-400">
+                        {% if about.location %}
+                            <li class="flex items-center gap-2">
+                                <i class="fas fa-map-pin text-brand-500 text-xs"></i>
+                                <span>{{ about.location }}</span>
+                            </li>
+                        {% endif %}
+                        {% if about.email %}
+                            <li class="flex items-center gap-2">
+                                <i class="fas fa-envelope text-brand-500 text-xs"></i>
+                                <span>{{ about.email }}</span>
+                            </li>
+                        {% endif %}
+                        <li class="pt-2">
+                            <a href="{% url 'tipping' %}" class="inline-flex items-center gap-2 text-xs font-semibold text-amber-300 bg-amber-950/60 border border-amber-500/30 px-3.5 py-1.5 rounded-lg hover:bg-amber-900/60 transition-colors shadow-sm">
+                                <i class="fas fa-mug-hot text-amber-400"></i>
+                                <span>Buy Me a Coffee</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            <!-- Footer Navigation -->
-            <div class="row mt-3">
-                <div class="col-12">
-                    <hr class="border-secondary">
-                    <div class="text-center">
-                        <a href="{% url 'home' %}" class="text-white me-3 hover-lift">Home</a>
-                        <a href="{% url 'about' %}" class="text-white me-3 hover-lift">About</a>
-                        <a href="{% url 'project_list' %}" class="text-white me-3 hover-lift">Projects</a>
-                        <a href="{% url 'education' %}" class="text-white me-3 hover-lift">Education</a>
-                        <a href="{% url 'contact' %}" class="text-white me-3 hover-lift">Consult</a>
-                        <a href="{% url 'bussiness_card' %}" class="text-white hover-lift">Business Card</a>
-                    </div>
+
+            <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+                <p>&copy; {% now "Y" %} Isaac Rono. Engineered with Python & Django.</p>
+                <div class="flex items-center gap-4">
+                    <span class="inline-flex items-center gap-1.5 text-gray-400">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Available for select projects
+                    </span>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
+    <!-- Modular Custom JavaScript -->
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

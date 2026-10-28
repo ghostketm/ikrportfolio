@@ -1,104 +1,133 @@
-{% extends 'base.html' %} {% load static %} {% load custom_filters %} {# if
-you're using custom filters like 'split' #} {% block title %}Isaac Rono Digital
-Business Card{% endblock %} {% block content %}
-<div class="container pt-5 mt-4">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <h1 class="section-title text-center mb-4">Digital Business Card</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
 
-      <!-- Business Card -->
-      <div
-        class="business-card mx-auto shadow-lg p-4 rounded"
-        style="max-width: 600px; background-color: #011b05ff"
-      >
-        <div class="business-card-content">
-          <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-3 mb-md-0">
-              {% if about.profile_image %}
-              <img
-                src="{{ about.profile_image.url }}"
-                class="img-fluid rounded-circle profile-image"
-                alt="{{ about.name }}"
-                style="width: 150px; height: 150px; object-fit: cover"
-              />
-              {% else %}
-              <div
-                class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                style="width: 150px; height: 150px"
-              >
-                <span class="fs-1">{{ about.name|slice:":1" }}</span>
-              </div>
-              {% endif %}
-            </div>
+{% block title %}Digital Business Card | {{ about.name|default:"Isaac Rono" }}{% endblock %}
 
-            <div class="col-md-8">
-              <h2 class="mb-1 text-uppercase">{{ about.name }}</h2>
-              <p class="mb-2">IT Guru | Software Engineer</p>
-              <ul class="list-unstyled">
-                {% if about.email %}
-                <li>
-                  <i class="fas fa-envelope text-color-white me-2"></i>
-                  <a
-                    href="mailto:{{ about.email }}"
-                    class="text-white text-decoration-none"
-                    >{{ about.email }}</a
-                  >
-                </li>
-                {% endif %} {% if about.phone %}
-                <li>
-                  <i class="fas fa-phone text-white me-2"></i>
-                  <a
-                    href="tel:{{ about.phone }}"
-                    class="text-white text-decoration-none"
-                    >{{ about.phone }}</a
-                  >
-                </li>
-                {% endif %} {% if about.website %}
-                <li>
-                  <i class="fas fa-globe text-white me-2"></i>
-                  <a
-                    href="{{ about.website }}"
-                    target="_blank"
-                    class="text-white"
-                    >{{ about.website }}</a
-                  >
-                </li>
-                {% endif %} {% if about.location %}
-  <li>
-    <i class="fas fa-map-marker-alt text-white me-2"></i>
-    {{ about.location }}
-  </li>
-{% endif %}
-              </ul>
-            </div>
-          </div>
-        </div>
+{% block content %}
+<div class="max-w-xl mx-auto px-4 sm:px-6 space-y-8">
 
-        {% if about.skills %}
-        <hr class="my-4" />
-        <h5 class="mb-2">Skills</h5>
-        <div class="d-flex flex-wrap gap-2">
-          {% for skill in about.skills|split:"," %}
-          <span class="badge bg-secondary">{{ skill }}</span>
-          {% endfor %}
-        </div>
-        {% endif %} {% if about.social_links %}
-        <hr class="my-4" />
-        <h5 class="mb-2">Connect With Me</h5>
-        <div class="d-flex flex-wrap gap-3">
-          {% for platform, link in about.social_links.items %}
-          <a
-            href="{{ link }}"
-            target="_blank"
-            class="btn btn-outline-light btn-sm"
-          >
-            <i class="fab fa-{{ platform|lower }}"></i> {{ platform|title }}
-          </a>
-          {% endfor %}
-        </div>
-        {% endif %}
-      </div>
+    <div class="text-center space-y-2">
+        <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Direct Contact Token</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Digital Business Card</h1>
     </div>
-  </div>
+
+    <!-- The Virtual Business Card -->
+    <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-brand-500/30 shadow-2xl space-y-6">
+        
+        <!-- Decorative subtle corner accent -->
+        <div class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br from-brand-500/20 to-cyan-500/20 rounded-full blur-xl pointer-events-none"></div>
+
+        <!-- Header: Avatar + Identity -->
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+            {% if about.profile_image %}
+                <img src="{{ about.profile_image.url }}" alt="{{ about.name }}" class="w-24 h-24 rounded-2xl object-cover border-2 border-brand-500/40 shadow-md">
+            {% else %}
+                <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center font-mono font-bold text-3xl text-white shadow-lg">
+                    {{ about.name|slice:":1" }}
+                </div>
+            {% endif %}
+
+            <div class="space-y-1">
+                <h2 class="text-2xl font-bold text-white tracking-tight">{{ about.name|default:"Isaac Rono" }}</h2>
+                <p class="text-xs font-mono text-brand-400 uppercase tracking-wider font-semibold">
+                    {{ about.title|default:"Enterprise Systems Architect & Software Engineer" }}
+                </p>
+                <p class="text-xs text-gray-400">
+                    {{ about.location|default:"Kenya" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Coordinates Details Block -->
+        <div class="space-y-3 pt-2 text-xs border-t border-white/10">
+            {% if about.email %}
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-dark-900/60 border border-white/5">
+                    <div class="flex items-center gap-2.5 text-gray-300 truncate">
+                        <i class="fas fa-envelope text-brand-400 text-sm"></i>
+                        <span class="truncate">{{ about.email }}</span>
+                    </div>
+                    <button type="button" data-copy-text="{{ about.email }}" class="text-gray-400 hover:text-white px-2 py-1 rounded bg-white/5 font-mono text-[10px] shrink-0">
+                        Copy
+                    </button>
+                </div>
+            {% endif %}
+
+            {% if about.phone %}
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-dark-900/60 border border-white/5">
+                    <div class="flex items-center gap-2.5 text-gray-300">
+                        <i class="fas fa-phone text-brand-400 text-sm"></i>
+                        <span>{{ about.phone }}</span>
+                    </div>
+                    <button type="button" data-copy-text="{{ about.phone }}" class="text-gray-400 hover:text-white px-2 py-1 rounded bg-white/5 font-mono text-[10px] shrink-0">
+                        Copy
+                    </button>
+                </div>
+            {% endif %}
+
+            {% if about.website %}
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-dark-900/60 border border-white/5">
+                    <div class="flex items-center gap-2.5 text-gray-300">
+                        <i class="fas fa-globe text-brand-400 text-sm"></i>
+                        <span class="truncate">{{ about.website }}</span>
+                    </div>
+                    <a href="{{ about.website }}" target="_blank" class="text-brand-400 hover:text-brand-300 px-2 py-1 font-mono text-[10px]">
+                        Visit
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Skills Mini-Strip -->
+        {% if skills %}
+            <div class="space-y-2 border-t border-white/10 pt-4">
+                <span class="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Core Technologies</span>
+                <div class="flex flex-wrap gap-1.5">
+                    {% for skill in skills|slice:":8" %}
+                        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/5">
+                            {{ skill.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Social Media Fast Access -->
+        <div class="flex items-center justify-center gap-3 pt-4 border-t border-white/10">
+            {% if about.github %}
+                <a href="{{ about.github }}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-dark-900 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:border-brand-500 transition-colors">
+                    <i class="fab fa-github"></i>
+                </a>
+            {% endif %}
+            {% if about.linkedin %}
+                <a href="{{ about.linkedin }}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-dark-900 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:border-brand-500 transition-colors">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            {% endif %}
+            {% if about.twitter %}
+                <a href="{{ about.twitter }}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-dark-900 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:border-brand-500 transition-colors">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+            {% endif %}
+            {% if about.youtube %}
+                <a href="{{ about.youtube }}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-dark-900 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:border-brand-500 transition-colors">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- Quick action links -->
+    <div class="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs">
+        <a href="{% url 'contact' %}" class="px-5 py-2.5 rounded-xl bg-brand-500 text-white font-medium hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/20">
+            Send Message
+        </a>
+        <a href="{% url 'tipping' %}" class="px-5 py-2.5 rounded-xl bg-dark-800 text-amber-400 border border-amber-500/30 hover:bg-amber-950/40 transition-colors font-medium flex items-center gap-2">
+            <i class="fas fa-mug-hot text-xs"></i>
+            <span>Buy Me a Coffee</span>
+        </a>
+    </div>
+
 </div>
 {% endblock %}

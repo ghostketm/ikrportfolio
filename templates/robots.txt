@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow administrative panel
+Disallow: /admin/
+
+# Sitemaps
+Sitemap: https://isaacrono.com/sitemap.xml

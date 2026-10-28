@@ -1,199 +1,243 @@
 {% extends 'base.html' %}
-{%load custom_filters%}
-{% block title %}Isaac Rono{% endblock %}
+{% load custom_filters %}
+
+{% block title %}{{ about.name|default:"Isaac Rono" }} | Enterprise Architect & Software Engineer{% endblock %}
 
 {% block content %}
-<section class="hero-section d-flex align-items-center pt-4" style="margin-top: 60px;">
-  <div class="container">
-    <div class="row align-items-center gy-4">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="display-5 fw-bold text-uppercase mt-2 mb-2" style="letter-spacing: normal;">
-            {{ about.name|default:"Isaac Rono" }}
-        </h2>
-        <p class="lead text-warning fs-4 mb-2">
-          {{ about.title|default:"IT Guru & Software Developer" }}
-        </p>
-        <p class="fs-6 mb-4">
-          {{ about.bio|default:"Passionate about creating innovative solutions and pushing the boundaries of technology."|truncatewords:300 }}
-        </p>
-        <div class="d-flex flex-column flex-sm-row gap-3">
-          <a href="{% url 'about' %}" class="btn btn-custom btn-lg hover-lift w-100 w-sm-auto">
-            <i class="fas fa-user light"></i> Learn More
-          </a>
-          <a href="{% url 'project_list' %}" class="btn btn-outline-custom btn-lg hover-lift w-100 w-sm-auto">
-            <i class="fas fa-laptop-code"></i> View Projects
-          </a>
-        </div>
-      </div>
-      <div class="col-lg-6 col-md-12 text-center">
-        {% if about.profile_image %}
-        <img src="{{ about.profile_image.url }}" class="img-fluid profile-image rounded-circle" alt="{{ about.name }}"
-          style="max-width: 100%; max-height: 400px; object-fit: cover" />
-        {% else %}
-        <div class="bg-gradient-primary d-flex align-items-center justify-content-center rounded-circle mx-auto"
-          style="width: 300px; height: 300px;">
-          <i class="fas fa-user fa-6x text-dark"></i>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</section>
+<div class="space-y-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-<section class="py-5">
-  <div class="container">
-    <h2 class="section-title text-center mb-5">Featured Projects</h2>
-    <div class="row">
-      {% for project in featured_projects %}
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card h-100 animated-card glow-on-hover">
-          {% if project.image %}
-          <img src="{{ project.image.url }}" class="card-img-top project-image" alt="{{ project.title }}"
-            style="height: 200px; object-fit: cover" />
-          {% else %}
-          <div class="card-img-top bg-gradient-secondary d-flex align-items-center justify-content-center"
-            style="height: 200px;">
-            <i class="fas fa-code fa-3x text-white"></i>
-          </div>
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title text-primary-custom">
-              <i class="fas fa-project-diagram"></i> {{ project.title }}
-            </h5>
-            <p class="card-text">{{ project.description|truncatewords:20 }}</p>
-            <div class="mb-3">
-              {% for tech in project.technologies|split:"," %}
-              <span class="badge bg-secondary">{{ tech }}</span>
-              {% endfor %}
+    <!-- HERO SECTION -->
+    <section class="relative pt-6 pb-12 lg:pt-16 lg:pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <!-- Left Editorial Text -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+                    Available for Enterprise & Engineering Consulting
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                    Architecting <span class="text-gradient">Reliable Systems</span> & Scalable Software.
+                </h1>
+
+                <p class="text-lg text-gray-300 leading-relaxed max-w-2xl">
+                    I am <strong class="text-white">{{ about.name|default:"Isaac Rono" }}</strong>, a {{ about.title|default:"Senior Systems Architect & Software Engineer" }} based in {{ about.location|default:"Kenya" }}. Bridging robust enterprise ERP implementations with modern cloud platforms and full-stack engineering.
+                </p>
+
+                <!-- Action CTA row -->
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a href="{% url 'project_list' %}" class="px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium text-sm shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+                        <span>Explore Selected Works</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                    <a href="{% url 'about' %}" class="px-6 py-3.5 rounded-xl bg-dark-800 hover:bg-dark-700 text-gray-200 border border-white/10 font-medium text-sm hover-lift inline-flex items-center gap-2">
+                        <i class="fas fa-user-circle text-gray-400"></i>
+                        <span>Read Profile</span>
+                    </a>
+                    {% if about.resume %}
+                        <a href="{{ about.resume.url }}" download class="px-5 py-3.5 rounded-xl text-gray-400 hover:text-brand-400 text-sm font-medium transition-colors inline-flex items-center gap-2">
+                            <i class="fas fa-file-download"></i>
+                            <span>Resume</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Metrics Strip -->
+                <div class="grid grid-cols-3 gap-4 pt-8 border-t border-white/10 max-w-lg">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">{{ about.years_of_experience|default:"5" }}+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-0.5">Years Experience</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">{{ project_count|default:"10" }}+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-0.5">Projects Shipped</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">{{ skill_count|default:"20" }}+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-0.5">Core Competencies</div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="card-footer bg-transparent d-flex flex-wrap gap-2">
-            <a href="{% url 'project_detail' project.pk %}" class="btn btn-custom btn-sm hover-lift flex-fill">
-              <i class="fas fa-eye"></i> View Details
+
+            <!-- Right Profile Visual Card -->
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="relative w-full max-w-md">
+                    <!-- Glow Behind Image -->
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-500 to-cyan-500 rounded-3xl blur-xl opacity-30"></div>
+                    
+                    <div class="relative glass-panel rounded-3xl p-4 overflow-hidden">
+                        {% if about.profile_image %}
+                            <img src="{{ about.profile_image.url }}" alt="{{ about.name }}" class="w-full h-96 object-cover rounded-2xl shadow-inner">
+                        {% else %}
+                            <div class="w-full h-96 rounded-2xl bg-gradient-to-br from-dark-800 to-dark-950 flex flex-col items-center justify-center text-center p-6 border border-white/5">
+                                <div class="w-20 h-20 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-4">
+                                    <i class="fas fa-terminal text-3xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">{{ about.name|default:"Isaac Rono" }}</h3>
+                                <p class="text-xs font-mono text-brand-400 mt-1">{{ about.title|default:"Enterprise Systems Architect" }}</p>
+                            </div>
+                        {% endif %}
+
+                        <!-- Floating Badge -->
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-dark-900/90 backdrop-blur-md border border-white/10 shadow-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-400 font-mono">Current Focus</p>
+                                <p class="text-sm font-semibold text-white">ERP Solutions & Cloud Architecture</p>
+                            </div>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PROJECTS SECTION -->
+    <section class="space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+                <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Portfolio Highlights</span>
+                <h2 class="text-3xl font-bold text-white tracking-tight mt-1">Featured Engineering Projects</h2>
+            </div>
+            <a href="{% url 'project_list' %}" class="inline-flex items-center gap-2 text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors group">
+                <span>View All Projects</span>
+                <i class="fas fa-arrow-right text-xs transform group-hover:translate-x-1 transition-transform"></i>
             </a>
-            {% if project.github_url %}
-            <a href="{{ project.github_url }}" class="btn btn-outline-custom btn-sm hover-lift flex-fill" target="_blank">
-              <i class="fab fa-github"></i> Code
-            </a>
-            {% endif %}
-          </div>
         </div>
-      </div>
-      {% empty %}
-      <div class="col-12 text-center">
-        <div class="card bg-gradient-secondary p-5">
-          <h3 class="text-white mb-3">
-            <i class="fas fa-code-branch"></i> Projects Coming Soon
-          </h3>
-          <p class="text-white lead">
-            Exciting projects are being developed. Check back soon!
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
 
-    {% if featured_projects %}
-    <div class="text-center mt-4">
-      <a href="{% url 'project_list' %}" class="btn btn-outline-custom btn-lg hover-lift">
-        <i class="fas fa-plus"></i> View All Projects
-      </a>
-    </div>
-    {% endif %}
-  </div>
-</section>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for project in featured_projects %}
+                <article class="glass-panel rounded-2xl overflow-hidden hover-lift flex flex-col h-full group">
+                    <!-- Project Preview Media -->
+                    <div class="relative h-48 w-full bg-dark-950 overflow-hidden border-b border-white/5">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-800 to-dark-900 text-gray-600">
+                                <i class="fas fa-laptop-code text-4xl group-hover:text-brand-400 transition-colors"></i>
+                            </div>
+                        {% endif %}
+                        <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                            {% if forloop.first %}
+                                <span class="px-2.5 py-1 text-xs font-mono rounded-full bg-emerald-500/90 text-white font-medium shadow-md shadow-emerald-500/20 border border-emerald-400/40 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                    Latest
+                                </span>
+                            {% elif project.featured %}
+                                <span class="px-2.5 py-1 text-xs font-mono rounded-full bg-dark-900/80 backdrop-blur-md text-amber-300 border border-amber-500/30">
+                                    Featured
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 text-xs font-mono rounded-full bg-cyan-950/80 backdrop-blur-md text-cyan-300 border border-cyan-500/30">
+                                    Updated
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
 
-<section class="py-5 bg-dark">
-  <div class="container">
-    <h2 class="section-title text-center mb-5 text-white">Technical Skills</h2>
-    <div class="row">
-      {% for skill in skills %}
-      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-        <div class="skills-card text-center hover-lift">
-          <div class="skill-icon mb-3">
-            <i class="fas fa-{{ skill.icon|default:'code' }} fa-2x text-primary-custom"></i>
-          </div>
-          <h6 class="card-title text-secondary-custom">{{ skill.name }}</h6>
-          <span class="badge badge-secondary">{{ skill.get_level_display }}</span>
-          <div class="progress mt-2" style="height: 6px;">
-            <div class="progress-bar bg-gradient-primary" style="width: {% if skill.level == 'beginner' %}25%{% elif skill.level == 'intermediate' %}50%{% elif skill.level == 'advanced' %}75%{% else %}100%{% endif %};"></div>
-          </div>
-        </div>
-      </div>
-      {% empty %}
-      <div class="col-12 text-center">
-        <div class="card bg-gradient-primary p-4">
-          <h4 class="text-dark mb-3"><i class="fas fa-tools"></i> Skills Portfolio</h4>
-          <p class="text-dark">Skills showcase will be available soon!</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+                    <!-- Project Info -->
+                    <div class="p-6 flex flex-col flex-grow space-y-4">
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white group-hover:text-brand-400 transition-colors">
+                                <a href="{% url 'project_detail' project.pk %}">{{ project.title }}</a>
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed line-clamp-3">
+                                {{ project.description }}
+                            </p>
+                        </div>
 
-<section class="py-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <h2 class="section-title text-start text-center">About Me</h2>
-        <p class="lead text-primary-custom">IT Guru & Technology Enthusiast</p>
-        <p class="fs-5">{{ about.bio|truncatewords:50 }}</p>
-        <div class="mt-4 d-flex flex-column flex-md-row gap-3">
-          <a href="{% url 'about' %}" class="btn btn-custom hover-lift w-100 w-md-auto">
-            <i class="fas fa-user-circle"></i> Learn More About Me
-          </a>
-          {% if about.resume %}
-          <a href="{{ about.resume.url }}" class="btn btn-outline-custom hover-lift w-100 w-md-auto mb-3 mb-md-0" download>
-            <i class="fas fa-download"></i> Download Resume
-          </a>
-          {% endif %}
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="row">
-          <div class="col-6 mb-3">
-            <div class="stat-card text-center p-3 bg-gradient-primary rounded">
-              <h3 class="text-dark mb-0">{{ projects.count|default:"10" }}+</h3>
-              <p class="text-dark mb-0">Projects</p>
-            </div>
-          </div>
-          <div class="col-6 mb-3">
-            <div class="stat-card text-center p-3 bg-gradient-secondary rounded">
-              <h3 class="text-white mb-0">{{ skills.count|default:"20" }}+</h3>
-              <p class="text-white mb-0">Skills</p>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="stat-card text-center p-3 border-glow rounded">
-              <h3 class="text-primary-custom mb-0">5+</h3>
-              <p class="text-white mb-0">Years Experience</p>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="stat-card text-center p-3 border-glow rounded">
-              <h3 class="text-accent mb-0">24/7</h3>
-              <p class="text-white mb-0">Support</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+                        <!-- Tech tags -->
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            {% for tech in project.get_technologies_list %}
+                                <span class="px-2 py-0.5 rounded text-xs font-mono bg-white/5 text-gray-300 border border-white/5">
+                                    {{ tech }}
+                                </span>
+                            {% endfor %}
+                        </div>
 
-<section class="py-5 bg-gradient-primary">
-  <div class="container text-center">
-    <h2 class="text-white mb-4">Ready to Work Together?</h2>
-    <p class="lead text-white mb-4">Get in touch and lets make it happen </p>
-    <div class="cta-buttons d-flex flex-column flex-sm-row justify-content-center gap-3">
-      <a href="{% url 'contact' %}" class="btn btn-dark btn-lg hover-lift">
-        <i class="fas fa-envelope"></i> Consult
-      </a>
-      <a href="{% url 'bussiness_card' %}" class="btn btn-outline-light btn-lg hover-lift">
-        <i class="fas fa-id-card"></i> Business Card
-      </a>
-    </div>
-  </div>
-</section>
+                        <div class="pt-4 mt-auto border-t border-white/5 flex items-center justify-between text-xs font-medium">
+                            <a href="{% url 'project_detail' project.pk %}" class="text-brand-400 hover:text-brand-300 inline-flex items-center gap-1.5">
+                                <span>Details</span>
+                                <i class="fas fa-chevron-right text-[10px]"></i>
+                            </a>
+                            <div class="flex items-center gap-3 text-gray-400">
+                                {% if project.github_url %}
+                                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-white" title="Source Code">
+                                        <i class="fab fa-github text-base"></i>
+                                    </a>
+                                {% endif %}
+                                {% if project.live_url %}
+                                    <a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-white" title="Live Preview">
+                                        <i class="fas fa-external-link-alt text-sm"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="col-span-full py-12 text-center glass-panel rounded-2xl">
+                    <i class="fas fa-folder-open text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400 text-sm">Projects are currently being cataloged. Check back soon.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- CORE SKILLS & CAPABILITIES -->
+    <section class="space-y-8">
+        <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Capabilities</span>
+            <h2 class="text-3xl font-bold text-white tracking-tight mt-1">Core Technical Competencies</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% for skill in skills %}
+                <div class="glass-panel p-5 rounded-xl hover-lift space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-brand-400">
+                            <i class="fas fa-{{ skill.icon|default:'terminal' }} text-sm"></i>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400 uppercase">{{ skill.get_level_display }}</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-white text-sm">{{ skill.name }}</h4>
+                        <p class="text-xs text-gray-400 mt-0.5 truncate">{{ skill.category }}</p>
+                    </div>
+                    <!-- Skill level meter -->
+                    <div class="w-full bg-dark-950 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-gradient-to-r from-brand-500 to-cyan-400 h-full rounded-full" style="width: {{ skill.level_percentage }}%;"></div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full py-8 text-center text-gray-500 text-sm">
+                    Skills list updating.
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- CONSULTATION CALLOUT -->
+    <section class="glass-panel rounded-3xl p-8 sm:p-12 border border-brand-500/20 relative overflow-hidden text-center sm:text-left">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            <div class="lg:col-span-8 space-y-3">
+                <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Let's Collaborate</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Have a technical initiative or system to build?</h2>
+                <p class="text-gray-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+                    Whether you require enterprise ERP consulting (Sage Intacct), robust API architectures, or bespoke cloud software development, I am open to discussing high-impact engagements.
+                </p>
+            </div>
+            <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center">
+                <a href="{% url 'contact' %}" class="px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium text-sm text-center shadow-lg shadow-brand-500/25 hover-lift">
+                    <i class="fas fa-paper-plane mr-2 text-xs"></i> Schedule Consultation
+                </a>
+                <a href="{% url 'bussiness_card' %}" class="px-6 py-3.5 rounded-xl bg-dark-800 hover:bg-dark-700 text-gray-200 border border-white/10 text-sm font-medium text-center hover-lift">
+                    <i class="fas fa-id-card mr-2 text-gray-400"></i> Open Business Card
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
 {% endblock %}

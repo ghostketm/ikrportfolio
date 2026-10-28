@@ -1,43 +1,109 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}IKR Knowledge{% endblock %}
+{% block title %}Education & Certifications | Isaac Rono{% endblock %}
+
 {% block content %}
-<div class="container pt-5 mt-4">
-    <h1 class="mb-4 text-center">Education</h1>
-    
-    {% if education_list %}
-        <div class="row">
-            {% for education in education_list %}
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ education.degree }}</h5>
-                            <h6 class="card-subtitle mb-2 text-secondary-custom">{{ education.institution }}</h6>                            
-                            <p class="card-text">{{ education.description }}</p>
-                            
-                            <div class="row text-success">
-                                <div class="col-6 mb-2">
-                                    <strong>Field of Study:</strong> {{ education.field_of_study }}
-                                </div>
-                                <div class="col-6 mb-2">
-                                    <strong>Start Date:</strong> {{ education.start_date|date:"M d, Y" }}
-                                </div>
-                                {% if education.end_date %}
-                                    <div class="col-6">
-                                        <strong>End Date:</strong> {{ education.end_date|date:"M d, Y" }}
-                                    </div>
-                                {% endif %}
-                            </div>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+    <!-- Header Section -->
+    <div class="space-y-4 text-center max-w-2xl mx-auto">
+        <span class="text-xs font-mono uppercase tracking-widest text-brand-400">Academic Background & Industry Credentials</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Credentials & Qualifications</h1>
+        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+            Formal technical degrees and professional vendor certifications that underpin my systems architecture and consulting practice.
+        </p>
+    </div>
+
+    <!-- Professional Industry Certifications -->
+    <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center">
+                    <i class="fas fa-certificate text-sm"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Professional Certifications</h2>
+            </div>
+            <span class="text-xs font-mono text-gray-400">Industry Verified</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for cert in certifications %}
+                <div class="glass-panel p-6 rounded-2xl hover-lift space-y-4 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="text-lg font-bold text-white">{{ cert.name }}</h3>
+                            <span class="shrink-0 text-xs font-mono px-2.5 py-1 rounded-full bg-white/5 text-brand-400 border border-white/10">
+                                {% if cert.issued_date %}{{ cert.issued_date|date:"Y" }}{% else %}Verified{% endif %}
+                            </span>
                         </div>
+                        <p class="text-sm text-brand-400 font-medium">{{ cert.issuer }}</p>
+                        {% if cert.credential_id %}
+                            <p class="text-xs font-mono text-gray-400">ID: {{ cert.credential_id }}</p>
+                        {% endif %}
                     </div>
+
+                    {% if cert.credential_url %}
+                        <div class="pt-3 border-t border-white/5">
+                            <a href="{{ cert.credential_url }}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-brand-400 hover:text-brand-300 inline-flex items-center gap-1.5">
+                                <span>Verify Credential</span>
+                                <i class="fas fa-external-link-alt text-[10px]"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="col-span-full py-8 text-center glass-panel rounded-2xl text-gray-400 text-sm">
+                    Certifications record updating.
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <div class="alert alert-info text-center">
-            No education information available.
+    </div>
+
+    <!-- Formal Education -->
+    <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-sm"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Higher Education</h2>
+            </div>
+            <span class="text-xs font-mono text-gray-400">Degree History</span>
         </div>
-    {% endif %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for education in education_list %}
+                <div class="glass-panel p-6 rounded-2xl hover-lift space-y-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">{{ education.degree }}</h3>
+                            <p class="text-sm text-cyan-400 font-medium mt-0.5">{{ education.institution }}</p>
+                        </div>
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-white/5 text-gray-300 border border-white/10 shrink-0">
+                            {{ education.start_date|date:"Y" }} – {% if education.end_date %}{{ education.end_date|date:"Y" }}{% else %}Present{% endif %}
+                        </span>
+                    </div>
+
+                    {% if education.field_of_study %}
+                        <div class="text-xs font-mono text-gray-400">
+                            Major: <span class="text-gray-200">{{ education.field_of_study }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if education.description %}
+                        <p class="text-sm text-gray-300 leading-relaxed border-t border-white/5 pt-3">
+                            {{ education.description }}
+                        </p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="col-span-full py-8 text-center glass-panel rounded-2xl text-gray-400 text-sm">
+                    Education records cataloging.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}
